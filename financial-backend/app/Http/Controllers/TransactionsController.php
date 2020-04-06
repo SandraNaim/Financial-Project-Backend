@@ -4,9 +4,25 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Transactions;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use JWTAuth;
 
 class TransactionsController extends Controller
 {
+
+    protected $user;
+
+    
+    public function __construct()
+    {
+        try {
+            $this->user = JWTAuth::parseToken()->authenticate();
+        } catch ( JWTException $error ) {
+
+        }
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +34,7 @@ class TransactionsController extends Controller
         
         return response()->json([
             'status' => 'success',
-            'transactions' => $transactions
+            'data' => $transactions
         ], 200);
         
         
@@ -35,17 +51,29 @@ class TransactionsController extends Controller
         $inputs = $request->all();
 
         $transactions = new Transactions ();
-        $income->title = $inputs['title']; 
-        $income->description = $inputs['description'];
-        $income->amount = $inputs['amount'];
-        $income->category_id =$inputs['category_id'];
-        $income->start_date= $inputs['start_date'];
-        $income->end_date= $inputs['end_date'];
-        $income->user_id= $inputs['user_id'];
-        $income->interval= $inputs['interval'];
-        $income->type= $inputs['type'];
-        $income->currency_id= $inputs['currecy_id'];
-        $income->save();
+        $transactions->title = $inputs['title']; 
+        $transactions->description = $inputs['description'];
+        $transactions->amount = $inputs['amount'];
+        $transactions->category_id =$inputs['category_id'];
+        $transactions->start_date= $inputs['start_date'];
+        $transactions->end_date= $inputs['end_date'];
+        $transactions->interval= $inputs['interval'];
+        $transactions->type= $inputs['type'];
+      
+
+        $transactions->currency_id= $inputs['currency_id'];
+        
+
+        if ($this->user->transactions()->save($transactions))
+            return response()->json([
+                'success' => true,
+                'data' => $transactions
+            ]);
+        else
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, income could not be added.'
+            ], 500);
     }
 
     /**
@@ -59,7 +87,7 @@ class TransactionsController extends Controller
         $transactions = Transactions::where('id',$id)->first();
         return response()->json([
            'status'=>'success',
-           'transactions'=> $transactions
+           'data'=> $transactions
 
         ]);
     }
@@ -77,17 +105,18 @@ class TransactionsController extends Controller
         $inputs = $request->all();
 
         $transactions = Transactions::where('id',$id)->first();
-        $income->title = $inputs['title']; 
-        $income->description = $inputs['description'];
-        $income->amount = $inputs['amount'];
-        $income->category_id =$inputs['category_id'];
-        $income->start_date= $inputs['start_date'];
-        $income->end_date= $inputs['end_date'];
-        $income->user_id= $inputs['user_id'];
-        $income->interval= $inputs['interval'];
-        $income->type= $inputs['type'];
-        $income->currency_id= $inputs['currecy_id'];
-        $income->save();
+        $transactions->title = $inputs['title']; 
+        $transactions->description = $inputs['description'];
+        $transactions->amount = $inputs['amount'];
+        $transactions->category_id =$inputs['category_id'];
+        $transactions->start_date= $inputs['start_date'];
+        $transactions->end_date= $inputs['end_date'];
+        $transactions->user_id= $inputs['user_id'];
+        $transactions->interval= $inputs['interval'];
+        $transactions->type= $inputs['type'];
+        $transactions->currency_id= $inputs['currecy_id'];
+
+        $transactions->save();
     }
 
    

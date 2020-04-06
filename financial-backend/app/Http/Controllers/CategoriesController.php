@@ -11,9 +11,7 @@ class CategoriesController extends Controller
 {
     protected $user;
 
-    /**
-     * TaskController constructor.
-     */
+    
     public function __construct()
     {
         try {
@@ -26,11 +24,11 @@ class CategoriesController extends Controller
 
     public function index()
     {
-        $categories = Categories::all();
+        $categories = $this->user->categories()->get()->toArray();
         
         return response()->json([
             'status' => 'success',
-            'categories' => $categories
+            'data' => $categories
         ], 200);
         
         
@@ -51,7 +49,7 @@ class CategoriesController extends Controller
         else
             return response()->json([
                 'success' => false,
-                'message' => 'Sorry, task could not be added.'
+                'message' => 'Sorry, category could not be added.'
             ], 500);
     }
 
