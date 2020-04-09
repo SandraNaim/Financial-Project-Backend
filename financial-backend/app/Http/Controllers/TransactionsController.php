@@ -33,7 +33,7 @@ class TransactionsController extends Controller
         $transactions = Transactions::all();
         
         return response()->json([
-            'status' => 'success',
+            'success' => true,
             'data' => $transactions
         ], 200);
         
@@ -61,19 +61,21 @@ class TransactionsController extends Controller
         $transactions->type= $inputs['type'];
       
 
-        $transactions->currency_id= $inputs['currency_id'];
+        $transactions->currency_id = $inputs['currency_id'];
         
 
-        if ($this->user->transactions()->save($transactions))
+        if ($this->user->transactions()->save($transactions)){
             return response()->json([
                 'success' => true,
                 'data' => $transactions
             ]);
-        else
+        }
+        else {
             return response()->json([
                 'success' => false,
                 'message' => 'Sorry, income could not be added.'
             ], 500);
+        }
     }
 
     /**
@@ -86,7 +88,7 @@ class TransactionsController extends Controller
     {
         $transactions = Transactions::where('id',$id)->first();
         return response()->json([
-           'status'=>'success',
+           'success'=> true,
            'data'=> $transactions
 
         ]);
@@ -111,12 +113,23 @@ class TransactionsController extends Controller
         $transactions->category_id =$inputs['category_id'];
         $transactions->start_date= $inputs['start_date'];
         $transactions->end_date= $inputs['end_date'];
-        $transactions->user_id= $inputs['user_id'];
         $transactions->interval= $inputs['interval'];
         $transactions->type= $inputs['type'];
         $transactions->currency_id= $inputs['currecy_id'];
 
-        $transactions->save();
+ 
+        if ($transactions->save()){ 
+            return response()->json([
+                'success' => true,
+                'data' => $transactions
+            ]);
+        }
+        else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, income could not be updated.'
+            ], 500);
+        }
     }
 
    

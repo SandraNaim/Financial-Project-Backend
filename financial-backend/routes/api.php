@@ -32,8 +32,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('transactions', 'TransactionsController@index');
     Route::get('transactions/create', 'TransactionsController@store');
     Route::get('transactions/{id}', 'TransactionsController@show');
-    Route::put('transactions/{id}', 'TransactionsController@updatea');
-
+    Route::put('transactions/{id}', 'TransactionsController@update');
 
     Route::post('currencies', 'CurrenciesController@store');
     Route::put('currencies/{id}', 'CurrenciesController@update');
