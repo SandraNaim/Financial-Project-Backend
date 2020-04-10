@@ -66,6 +66,7 @@ public function login(Request $request)
      * @param RegistrationFormRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
+
     public function register(Request $request)
     {
          // dd()
@@ -86,4 +87,67 @@ public function login(Request $request)
             'data'      =>  $user
         ], 200);
     }
+
+    public function getCurrentUser(){
+        try {
+           $user = JWTAuth::parseToken()->authenticate();
+
+            return response()->json([
+                'success' => true,
+                'data' => $user
+            ]);
+        } catch ( JWTException $error ) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, the user isn\'t logged in'
+            ], 500);
+        }
+    }
+
+     
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+ 
+            $inputs = $request->all();
+
+        $user = user::where('id',$id)->first();
+        $user->first_name = $inputs['first_name']; 
+        $user->last_name = $inputs['last_name'];
+        $user->currency_id= $inputs['currency_id'];
+        if(isset($inputs['password'])){
+            $user->password = bcrypt($inputs['password']);
+        }
+
+ 
+        if ($user->save()){ 
+            return response()->json([
+                'success' => true,
+                'data' => $user
+            ]);
+        }
+        else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, income could not be updated.'
+            ], 500);
+        }
+         } catch ( JWTException $error ) {
+             return response()->json([
+                 'success' => false,
+                 'message' => 'Sorry, the user isn\'t logged in'
+             ], 500);
+         }
+
+        
+    }
+
 }

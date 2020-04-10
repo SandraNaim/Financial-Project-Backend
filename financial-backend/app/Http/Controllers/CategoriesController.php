@@ -27,7 +27,7 @@ class CategoriesController extends Controller
         $categories = $this->user->categories()->get()->toArray();
         
         return response()->json([
-            'status' => 'success',
+            'success' => true,
             'data' => $categories
         ], 200);
         
@@ -57,7 +57,7 @@ class CategoriesController extends Controller
     {
         $categories = Categories::where('id',$id)->first();
         return response()->json([
-           'status'=>'success',
+           'success'=> true,
            'data'=> $categories
 
         ]);
@@ -67,12 +67,15 @@ class CategoriesController extends Controller
     {
         $inputs = $request->all();
 
-        $categories = categories::where('id',$id)->first();
-        $categories->country = $inputs['country']; 
-        $categories->symbol = $inputs['symbol'];
-        $categories->name = $inputs['name'];
-        $categories->code= $inputs['code'];
+        $category = Categories::where('id',$id)->first();
+        $category->name = $inputs['name'];
         
-        $categories->save();
+        $category->save();
+
+        return response()->json([
+            'success'=> true,
+            'data'=> $category
+ 
+         ]);
     }
 }

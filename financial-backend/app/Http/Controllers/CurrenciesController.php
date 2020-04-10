@@ -12,7 +12,7 @@ class CurrenciesController extends Controller
         $currencies = Currencies::all();
         
         return response()->json([
-            'status' => 'success',
+            'success' => true,
             'data' => $currencies
         ], 200);
         
@@ -34,7 +34,7 @@ class CurrenciesController extends Controller
         $currencies->save();
 
         return response()->json([
-            'status'=>'success',
+            'success'=> true,
             'data' => $currencies->get()
  
          ]);
@@ -44,7 +44,7 @@ class CurrenciesController extends Controller
     {
         $currencies = Currencies::where('id',$id)->first();
         return response()->json([
-           'status'=>'success',
+           'success'=> true,
            'data'=> $currencies
 
         ]);
@@ -63,7 +63,7 @@ class CurrenciesController extends Controller
         $currencies->save();
 
         return response()->json([
-            'status'=>'success',
+            'success'=> true,
             'data'=> $currencies
  
          ]);

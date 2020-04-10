@@ -28,7 +28,9 @@ Route::get('currencies/{id}', 'CurrenciesController@show');
 
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('logout', 'ApiController@logout');
+    Route::get('user', 'ApiController@getCurrentUser');
 
+    Route::get('user/update', 'ApiController@update');
     Route::get('transactions', 'TransactionsController@index');
     Route::get('transactions/create', 'TransactionsController@store');
     Route::get('transactions/{id}', 'TransactionsController@show');
@@ -41,5 +43,5 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('categories', 'CategoriesController@index');
     Route::get('categories/create', 'CategoriesController@store');
     Route::get('categories/{id}', 'CategoriesController@show');
-    Route::put('categories/{id}', 'CategoriesController@update');
+    Route::get('categories/update/{id}', 'CategoriesController@update');
 });
