@@ -112,14 +112,14 @@ public function login(Request $request)
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         try {
             $user = JWTAuth::parseToken()->authenticate();
  
             $inputs = $request->all();
 
-        $user = user::where('id',$id)->first();
+        $user = user::where('id',$user->id)->first();
         $user->first_name = $inputs['first_name']; 
         $user->last_name = $inputs['last_name'];
         $user->currency_id= $inputs['currency_id'];
